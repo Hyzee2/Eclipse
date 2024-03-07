@@ -72,7 +72,6 @@ public class ArrayScore { // N명의 성적 처리 프로그램 만드는 함수
 		for(int i=0; i<cnt; i++) {
 			avg[i] = (float)score[i][3] / 3;
 		}
-		
 	}
 	
 	//배열로 출력 함수
