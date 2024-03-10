@@ -11,7 +11,10 @@ public class Star4 {
 			}
 			System.out.println();
 		}
+		
 	}
+	
+	
 }
 
 //1일때 3번째 자리에 1개(빈자리는 4개)

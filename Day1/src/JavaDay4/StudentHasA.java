@@ -72,21 +72,5 @@ public class StudentHasA {
 		return avg;
 	}
 	
-//	public static void main(String[] args) {
-//		
-//		StudentHasA stu = new StudentHasA();
-//		
-//		stu.setName("Superman");
-//		stu.setKor(90);
-//		stu.setMat(100);
-//		stu.setEng(70);
-//		
-//		System.out.println(stu.getName());
-//		System.out.println(stu.getKor());
-//		System.out.println(stu.getMat());
-//		System.out.println(stu.getEng());
-//		System.out.println(stu.getTotal());
-//		System.out.println(stu.getAvg());
-//	}
 
 }

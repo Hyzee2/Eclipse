@@ -21,10 +21,10 @@ public class HasA {
 	private String name;
 	private A age;
 
-	public HasA() { // 생성자 함수를 통해 객체 생성
+	public HasA() { // 객체 생성 시 생성자 함수 호출  
 		System.out.println("HasA");
 		name = "";
-		age = new A();
+		age = new A(); //디폴트 값으로 age는 A클래스를 통해 객체를 생성하도록 설정   
 	}
 
 	public void setName(String name) {
