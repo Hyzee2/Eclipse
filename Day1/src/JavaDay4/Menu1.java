@@ -7,11 +7,13 @@ public class Menu1 { //학생 성적 입력 버튼 (ScoreInput 클래스의 배�
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
+	
+		ScoreInput []si = new ScoreInput[100]; //100을 배열의 길이로 설정 
 		
-		System.out.println("학생 수를 입력하세요");
-		int num = sc.nextInt();
+		int num=0;
 		
-		ScoreInput []si = new ScoreInput[num]; //입력받는 num(학생 수) 값으로 배열의 길이 초기화 선언  
+		System.out.println("입력할 학생 수는 총 몇 명입니까?");
+		num=sc.nextInt();
 		
 		for(int i=0; i<num; i++) {
 			System.out.println((i+1)+"번째 학생의 이름과 국어, 영어, 수학 점수를 차례로 입력하세요");
