@@ -1,32 +1,44 @@
 package SalaryProgram;
-import java.util.Scanner;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class Employee {
 	
 	private String name; //이름 
-	private int employeeNum; //사번
-	private String hireDateStr; // 입사일자
+	private String employeeNum; //사번
+	private String hireDate; // 입사일자
+	private int overtime=0; // 시간외 근무(분)
 	private int temp; // 비정규직이면 1, 정규직이면 0
 	private OverPay overpay; //월별시간외수당 
 	private Kpi kpi; //성과 지급률
 	private Position position; //직급별 급여
 	private PayStep paystep; // 호봉별 급여
 	private int tenure; //근속연수
+	private double salary; // 급여  
+	private double taxRate=0.15; //세율은 15%
+	private double tax; //세금  
 	
-	public Employee() { //생성자함수에 객체 생성 
+	public Employee() {
 		
-		Scanner sc = new Scanner(System.in);
+	}
+	
+	public Employee(String name, String employeeNum, String hireDate, String position, int overtime, String kpi) {  
 		
-		overpay = new OverPay();
-		kpi = new Kpi();
-    	position = new Position();
-    	paystep = new PayStep(); 
+		this.name = name;
+		this.employeeNum = employeeNum;
+		this.hireDate = hireDate;
+		this.overtime = overtime;
+		this.kpi = new Kpi(kpi);
+    	this.position = new Position(position);
+    	tenure = tenureYear(hireDate);
+		overpay = new OverPay(overtime);
+    	paystep = new PayStep(position, tenure); 
     	
 	}
+	
+	
 	//=============이름 입력 함수===============
 	public void setName(String n) {
 		this.name = n;
@@ -37,21 +49,21 @@ public class Employee {
 	}
 	
 	//==============사번 입력 함수==============
-	public void setEmpnum(int m) {
+	public void setEmpnum(String m) {
 		this.employeeNum = m;
 	}
 	
-	public int getEmpnum() {
+	public String getEmpnum() {
 		return employeeNum;
 	}
 	
 	//===============입사일자 입력 함수==========
-	public void setHire(String h) {
-		this.hireDateStr=h;
+	public void setHire(String hiredate) {
+		this.hireDate=hiredate;
 	}
 	
 	public String getHire() {
-		return hireDateStr;
+		return hireDate;
 	}
 	
 	//=============월별 시간외 수당==============
@@ -110,7 +122,7 @@ public class Employee {
 	}
 	//==============호봉별 급여================
 	public void setPayStep(String position, int tenure) {  //매개변수는 사용자들이 입력할 데이터형으로 지정!
-		paystep.matchStep(getPo(), tenure);  //실제 내부적으로 코드가 작동되는 문법으로 작성!
+		paystep.matchStep(position, tenure);  //
 	}
 	
 	public int getPayStep() {
@@ -118,28 +130,16 @@ public class Employee {
 	}
 	
 	public void setStepSalary(String position, int tenure) {
-		paystep.matchStep(getPo(), tenure);
+		paystep.matchStep(position, tenure);
 	}
 	
 	public int getStepSalary() {
 		return paystep.getStepSalary();
 	}
 	
-//	public static void main(String[] args) {
-//		PayStep ps = new PayStep(); 
-//		System.out.println("이건 paystep의 실행값");
-//		ps.setPayStep("대리", 4);
-//		System.out.println(ps.getPayStep());
-//		System.out.println("이건 stepsalary의 실행값");
-//		ps.setStepSalary("대리", 4);
-//		System.out.println(ps.getStepSalary());
-//	}
-	
 	//=================근속연수(년) 구하기======================
 	public int tenureYear(String hireDateStr) {	// 매개변수로 넣어준다. 
 
-      	// 직원의 입사일자를 문자열로 나타낸다.
-        //String hireDateStr = "";
         // 직원의 입사일자를 LocalDate로 변환한다.
         LocalDate hireDate = LocalDate.parse(hireDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
@@ -153,6 +153,15 @@ public class Employee {
         return result.getYears();
     }
 	
+	public void setTenure(int tenure) {
+		Employee em = new Employee();
+		this.tenure = em.tenureYear(hireDate);
+	}
+
+	public int getTenure() {
+		return tenure;
+	}
+	
 	//=================비정규직 여부=======================
 
 	public int getTemperate() {
@@ -164,48 +173,27 @@ public class Employee {
 		}
 		return temp;
 	}
+	
+	//====================급여계산=========================
+	public void salaryResult() {
+		salary = position.getPopay()*(1+kpi.getKpiRate())+paystep.getStepSalary()+overpay.getOverpay();
+		tax = salary * taxRate;
+		salary = salary - tax;
+	}
 
+	public double getTaxRate() {
+		return taxRate;
+	}
+	
+	public double getTax() {
+		return tax;
+	}
+	
+	public double getSalary() {
+		return salary;
+	}
 }
-//    public static void main(String[] args) {
-//        //배열로 객체 생성?
-//    	Employee emp = new Employee();
-//    	
-//    	//OverPay sample
-//    	overpay.setOvertime(200);
-//    	int s = overpay.getOvertime();
-//    	System.out.println(s);
-//    	overpay.overpay(s);
-//    	int ss = overpay.getOverpay();
-//    	System.out.println(ss);
-//    	
-//    	//Kpi sample
-//    	kpi.setKpi("양호");
-//    	String k = kpi.getKpi();
-//    	System.out.println(k);
-//    	kpi.match(k);
-//    	double kk = kpi.getKpiRate();
-//    	System.out.println(kk);
-//    	
-//    	//Position sample
-//    	po.setPo("대리");
-//    	String p = po.getPo();
-//    	System.out.println(p);
-//    	po.match(p);
-//    	int pp = po.getPopay();
-//    	System.out.println(pp);
-//    	
-//    	//PayStep sample
-//    	ps.match("대리", 2);
-//    	int w = ps.getPayStep();
-//    	System.out.println(w);
-//    	int ww = ps.getStepSalary();
-//    	System.out.println(ww);
-    	
-    	
-   
-    	
-   
-//}
+	
 
 
 

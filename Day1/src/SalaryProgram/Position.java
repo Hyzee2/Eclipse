@@ -4,9 +4,13 @@ public class Position { // 직급
 	private String position;
 	private int positionPay;
 	
-	public void setPo(String position) {
+	public Position(String position) {
 		this.position = position;
 		matchPo(position);
+	}
+	
+	public void setPo(String position) {
+		this.position = position;
 	}
 	
 	public String getPo() {

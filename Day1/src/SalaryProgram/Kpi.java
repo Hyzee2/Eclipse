@@ -5,23 +5,21 @@ public class Kpi { // 성과
 	private String kpi;
 	private double kpiRate;
 	
+	public Kpi() { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
+
+	}
+	
+	public Kpi(String kpi) { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
+		this.kpi = kpi;
+	}
+	
 	public void setKpi(String kpi) { //kpi 값 지정해주기
 		this.kpi = kpi;
-		setKpiRate(kpi); //setKpiRate 메서드를 같이 실행시켜야 kpiRate값이 입력된다. 
 	}
 	
 	public String getKpi() { //kpi 값 반환해주기
 		return this.kpi;
 	}
-	
-	public Kpi(String kpi) { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
-		setKpiRate(kpi);
-	}
-	
-	public Kpi() { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
-
-	}
-	
 	
 	public void setKpiRate(String kpi) { //KpiRate 연산 해주는 함수
 		switch(kpi) {
