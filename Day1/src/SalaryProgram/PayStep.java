@@ -27,7 +27,7 @@ public class PayStep { //호봉별 급여
 	
 	public int getStepSalary() {
 		return stepSalary;
-	}
+	} 
 	
 	public void matchStep(String position, int tenure) { // 매개변수 필수로 지정
 		switch(position) {

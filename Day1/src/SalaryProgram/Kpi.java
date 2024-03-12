@@ -3,7 +3,15 @@ package SalaryProgram;
 public class Kpi { // 성과 
 	
 	private String kpi;
-	private double kpiRate;
+	private double kpiRate;	 
+	
+	public Kpi() { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
+
+	}
+	
+	public Kpi(String kpi) { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
+		this.kpi = kpi;
+	}
 	
 	public Kpi() { //생성자 함수: KpiRate 값을 셋팅해주는 함수 자동 호출되도록!
 

@@ -17,7 +17,7 @@ public class OverPay { // 월별 시간외 수당
 	public int getOvertime() { //시간외근무 시간 get
 		return this.overtime;
 	} 
-	
+	 
 	public void op(int overtime) { //시간외근무 수당 연산 함수
 		this.overpay = overtime / 30 * 10000; 
 	}

@@ -19,12 +19,18 @@ public class Employee {
 	private double salary; // 급여  
 	private double taxRate=0.15; //세율은 15%
 	private double tax; //세금  
+
 	
 	public Employee() {
 		
 	}
 	
+
 	public Employee(String name, String employeeNum, String hireDate, String position, int overtime, String kpi) {  
+
+	
+
+	
 		
 		this.name = name;
 		this.employeeNum = employeeNum;
@@ -122,12 +128,14 @@ public class Employee {
 	}
 	//==============호봉별 급여================
 	public void setPayStep(String position, int tenure) {  //매개변수는 사용자들이 입력할 데이터형으로 지정!
+
 		paystep.matchStep(position, tenure);  //
+		
 	}
 	
 	public int getPayStep() {
 		return paystep.getPayStep();
-	}
+	} 
 	
 	public void setStepSalary(String position, int tenure) {
 		paystep.matchStep(position, tenure);
@@ -138,17 +146,19 @@ public class Employee {
 	}
 	
 	//=================근속연수(년) 구하기======================
+
 	public int tenureYear(String hireDateStr) {	// 매개변수로 넣어준다. 
 
         // 직원의 입사일자를 LocalDate로 변환한다.
         LocalDate hireDate = LocalDate.parse(hireDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        // 현재 날짜를 구한다.
+	
+
+        // 현재 날짜
         LocalDate currentDate = LocalDate.now();
 
-        // 근속 연수를 계산한다.
+        // 근속 연수 계산
         Period result = Period.between(hireDate, currentDate);
-        
         
         return result.getYears();
     }
@@ -163,7 +173,6 @@ public class Employee {
 	}
 	
 	//=================비정규직 여부=======================
-
 	public int getTemperate() {
 		String p = position.getPo();
 		if(p.equals("주임") || p.equals("임원")) {
@@ -193,7 +202,6 @@ public class Employee {
 		return salary;
 	}
 }
-	
 
 
 
