@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class AllStudent {
 	
-	
+	 
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in); //학생 수와 과목별 점수를 입력받아야 한다. 

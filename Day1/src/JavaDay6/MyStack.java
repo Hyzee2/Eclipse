@@ -7,9 +7,9 @@ class MyStack extends Memory {
 		
 //		return arr[--top]; // top이 1씩 줄어든다. arr[5] -> arr[4] -> arr[3] ...
 		
-		arr[top-1]=arr[top];
+		arr[top-1]=arr[top]; 
 		
-		if(top 5) {
+		if(top == 5) {
 			for(int i=top; i>=0; i--) {
 				arr[i-1] = arr[i];
 			}

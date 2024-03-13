@@ -7,7 +7,7 @@ public class Name {
 	
 	public Name() { // name 생성자 함수 
 		
-	}
+	} 
 	
 	public void setName(String name) { // name 값 입력받기
 		this.name = name;

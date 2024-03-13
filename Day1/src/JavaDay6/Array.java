@@ -13,7 +13,7 @@ public class Array {
 		this.arr[top++] = data; //arr[0]=d1, arr[1]=d2, arr[2]=d3...
 	}			
 
-	public int pop() {
+	public int[] pop(int top) {
 		
 		return arr[top];
 	
@@ -21,7 +21,7 @@ public class Array {
 		
 		Array ar = new Array();
 		
-		ar.push(10)
+		ar.push(10);
 		
 		for(int i=ar.top; i>=0; i--) {
 			ar.arr[i-1] = ar.arr[i];
