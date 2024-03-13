@@ -11,7 +11,7 @@ public class StudentHasA {
 	private Subject eng;
 	private int total;
 	private float avg;
-	
+ 	
 	public StudentHasA() { // 생성자 함수 
 		
 		name = new Name(); //객체 생성

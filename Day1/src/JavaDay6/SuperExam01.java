@@ -10,7 +10,7 @@ class AA{
 	public AA(int a) {
 		this.a = a; // AA클래스의 인스턴스 변수 a에다가 값을 할당해줌!
 	}
-	
+	 
 	public void setA(int a) {
 		this.a = a;
 	}

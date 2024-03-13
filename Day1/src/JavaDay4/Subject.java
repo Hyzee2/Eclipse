@@ -9,7 +9,7 @@ public class Subject {
 	}
 	
 
-	
+	 
 	public int getScore() {
 		return score;
 	}
