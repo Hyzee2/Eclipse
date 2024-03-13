@@ -32,9 +32,11 @@ public class PayStep { //호봉별 급여
 	public void matchStep(String position, int tenure) { // 매개변수 필수로 지정
 		switch(position) {
 		case "주임" :
+			this.payStep=0;
 			this.stepSalary=0;
 			break;
 		case "임원" :
+			this.payStep=0;
 			this.stepSalary=0;
 			break;
 		case "계장" :
@@ -82,6 +84,8 @@ public class PayStep { //호봉별 급여
 				this.stepSalary=4500000;
 			}
 			break;
+		default : 
+			return;
 		}
 	}
 	

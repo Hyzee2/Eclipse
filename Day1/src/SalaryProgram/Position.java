@@ -12,7 +12,7 @@ public class Position { // 직급
 	public void setPo(String position) {
 		this.position = position;
 	}
-	 
+
 	public String getPo() {
 		return position;
 	}

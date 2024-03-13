@@ -25,11 +25,12 @@ class ScoreInput { // 학생 성적 입력
 	}
 	
 	public String getName() { 
-		return name.getName();
+		return this.name.getName();
 	}
 	
 	public void setKor(int kor) { //setKor라고 현재 클래스에서 setter 메서드 만들어주는 것  
 		this.kor.setScore(kor); // 현재 클래스의 필드인 kor은 Subject클래스의 setScore 메서드를 이용  
+		
 	}
 
 	public int getKor() {
