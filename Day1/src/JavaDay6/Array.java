@@ -13,9 +13,10 @@ public class Array {
 		this.arr[top++] = data; //arr[0]=d1, arr[1]=d2, arr[2]=d3...
 	}			
 
-	public int[] pop(int top) {
+	public int pop(int top) {
 		
 		return arr[top];
+	}
 	
 	public static void main(String[] args) {
 		

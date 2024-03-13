@@ -3,26 +3,17 @@ package JavaDay4;
 
 public class Subject {
 	private int score;
-	
-	public Subject() { //Subject 생성자 함수 
-		
-	}
-	
 
-	 
+	public Subject() { // Subject 생성자 함수
+
+	}
+
 	public int getScore() {
 		return score;
 	}
 
-
-
 	public void setScore(int score) {
 		this.score = score;
 	}
-
-
-
-	
-	
 
 }
