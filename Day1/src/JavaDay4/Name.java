@@ -4,8 +4,12 @@ package JavaDay4;
 public class Name {
 
 	private String name;
-
-	public Name() { // name 생성자 함수
+	
+	public Name() {
+		
+	}
+	
+	public Name(String name) { // name 생성자 함수
 
 	}
 
