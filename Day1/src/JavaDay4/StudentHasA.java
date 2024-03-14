@@ -11,22 +11,21 @@ public class StudentHasA {
 	private Subject eng;
 	private int total;
 	private float avg;
-
-	public StudentHasA() { // 생성자 함수
-
-		name = new Name(); // 객체 생성
+	
+	public StudentHasA() {
+		name = new Name();
 		kor = new Subject();
-		mat = new Subject();
 		eng = new Subject();
-
+		mat = new Subject();
 	}
-
+	
 	public StudentHasA(Name name, Subject kor, Subject eng, Subject mat) { // 학생의 정보를 입력받는 생성자 함수
 		this.name = name;
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
 	}
+	
 	/*
 	 * public StudentHasA(Name name, Subject kor, Subject mat, Subject eng){
 	 * this.name =name; this.kor=kor; this.mat=mat; this.eng=eng; }
@@ -74,4 +73,20 @@ public class StudentHasA {
 		return avg;
 	}
 
+	@Override
+	public String toString() {
+		
+		String a ="이름은" + getName()+ ", 국어점수는" + getKor() + ", 영어점수는" + getEng() + ", 수학점수는" + getMat() + ", 총점은" + getTotal() + ", 평균은" + getAvg();
+		return a;
+	}
+	
+//	public static void main(String[] args) { // 출력 test
+//		StudentHasA stu = new StudentHasA();
+//		stu.name.setName("김");
+//		stu.kor.setScore(10); 
+//		stu.eng.setScore(20); 
+//		stu.mat.setScore(30);
+//		System.out.println(stu);
+//	}
 }
+

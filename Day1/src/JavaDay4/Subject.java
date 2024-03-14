@@ -4,7 +4,11 @@ package JavaDay4;
 public class Subject {
 	private int score;
 
-	public Subject() { // Subject 생성자 함수
+	public Subject() {
+		
+	}
+	
+	public Subject(int score) { // Subject 생성자 함수
 
 	}
 

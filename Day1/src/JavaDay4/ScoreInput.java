@@ -19,6 +19,13 @@ class ScoreInput { // 학생 성적 입력
 		
 	}
 	
+	public ScoreInput(Name name, Subject kor, Subject eng, Subject mat) { // 생성자함수로 객체 생성하는 초기화 선언해주기 
+		this.name = name;
+		this.kor = kor;
+		this.eng = eng;
+		this.mat = mat;
+	}
+	
 	public void setName(String name) { 
 		this.name.setName(name);
 		
@@ -62,6 +69,5 @@ class ScoreInput { // 학생 성적 입력
 		avg = (float)getTotal() / 3; // 간단하게 앞에 만들어둔 getTotal()을 사용할 수 있음  
 		return avg;
 	}
-	
 	
 }
