@@ -7,7 +7,7 @@ public class Name {
 	
 	public Name() {
 		
-	}
+	} 
 	
 	public Name(String name) { // name 생성자 함수
 

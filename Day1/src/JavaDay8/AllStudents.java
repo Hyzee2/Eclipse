@@ -34,20 +34,6 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 		return button;
 	}
 
-//	public void studentRow() { // 입력된 학생 정보 출력
-//		
-//		int i = all.indexOf(student);
-//		
-//			System.out.print(all.get(i).getName() + "\t");
-//			System.out.print(all.get(i).getKor() + "\t");
-//			System.out.print(all.get(i).getEng() + "\t");
-//			System.out.print(all.get(i).getMat() + "\t");
-//			System.out.print(all.get(i).getTotal() + "\t");
-//			System.out.print(all.get(i).getAvg());
-//			System.out.println();
-//		
-//		}
-	
 
 	public void stuInput() { // 학생 성적 입력
 		StudentHasA stu = new StudentHasA(); // 객체 생성 후 
@@ -65,15 +51,15 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 
 	public void stuModify() { // 학생 성적 수정
 		StudentHasA stu = new StudentHasA();
-		int index;
-
+		int s=0; // 수정된 점수 입력값  
+		
 		System.out.println("누구를 수정하시겠습니까? 이름을 입력해주세요");
-		String name = sc.next();
+		String nameIndex = sc.next();
 
 		for (int i = 0; i < arr.size(); i++) {
 			
-			if(index = arr.indexOf(name)) { //입력한 이름을 찾아서 그 위치를 
-				arr.get(index);
+			if(arr.get(i).getName().equals(nameIndex)) { //stu객체 속 이름을 getter해서 입력받은 이름과 동일하다면  
+				//arr.get(index);
 				System.out.println("무엇을 수정하시겠습니까? 숫자로 골라주세요");
 				System.out.print("1. 국어" + "\t" + "2. 영어" + "\t" + "3. 수학" + "\t" + "4. 종료");
 				int choice = sc.nextInt();
@@ -82,19 +68,20 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 				case 1:
 					System.out.println("수정된 점수를 입력해주세요");
 					s = sc.nextInt();
-					all[i].setKor(s);
+					arr.set(i, stu).setKor(s);
+					//all[i].setKor(s);
 					System.out.println("수정완료!");
 					break;
 				case 2:
 					System.out.println("수정된 점수를 입력해주세요");
 					s = sc.nextInt();
-					all[i].setEng(s);
+					arr.set(i, stu).setEng(s);
 					System.out.println("수정완료!");
 					break;
 				case 3:
 					System.out.println("수정된 점수를 입력해주세요");
 					s = sc.nextInt();
-					all[i].setMat(s);
+					arr.set(i, stu).setMat(s);
 					System.out.println("수정완료!");
 					break;
 				case 4:
@@ -106,11 +93,13 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 	}
 
 	public void stuSearch() { // 학생 이름으로 검색
+		
 		System.out.println("누구를 조회하시겠습니까? 이름을 입력해주세요");
-		String name = sc.next();
-		for (int i = 0; i < num; i++) {
-			if (all[i].getName().equals(name)) {
-				studentRow(i);
+		String nameIndex = sc.next();
+		
+		for (int i = 0; i < arr.size(); i++) {
+			if (arr.get(i).getName().equals(nameIndex)) {
+				System.out.println(arr.get(i));
 			} else {
 
 				System.out.println("존재하지 않는 이름 입니다");
@@ -119,8 +108,8 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 	}
 
 	public void stuPrint() { // 전체 학생 성적 출력
-		for(StudentHasA student : all) {
-			System.out.println(student);
+		for(StudentHasA stu : arr) {
+			System.out.println(stu);
 		}
 	}
 
@@ -128,28 +117,28 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 		
 		AllStudents allstu = new AllStudents();
 
-		allstu.stuInput();
-		allstu.studentRow();
+		//allstu.stuInput();
 		
 		
-//		do {
-//			allstu.main();
-//			switch (allstu.getButton()) {
-//			case 1:
-//				allstu.stuInput();
-//				break;
-//			case 2:
-//				allstu.stuModify();
-//				break;
-//			case 3:
-//				allstu.stuSearch();
-//				break;
-//			case 4:
-//				allstu.stuPrint();
-//				break;
-//			}
-//		} while (true);
-//
+		
+		do {
+			allstu.main();
+			switch (allstu.getButton()) {
+			case 1:
+				allstu.stuInput();
+				break;
+			case 2:
+				allstu.stuModify();
+				break;
+			case 3:
+				allstu.stuSearch();
+				break;
+			case 4:
+				allstu.stuPrint();
+				break;
+			}
+		} while (true);
+
 	}
 
 }

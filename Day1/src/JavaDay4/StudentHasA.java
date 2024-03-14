@@ -6,7 +6,7 @@ public class StudentHasA {
 	// 과목은 Subject 클래스
 	// 총점, 평균은 직접 필드로 만들기
 	private Name name;
-	private Subject kor;
+	private Subject kor; 
 	private Subject mat;
 	private Subject eng;
 	private int total;
