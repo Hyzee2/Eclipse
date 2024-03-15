@@ -4,17 +4,18 @@ import java.util.*;
 
 import JavaDay4.StudentHasA;
 
-public class AllStudents { // 학생 성적 관리 ArrayList로 담기
-	int button = 1;
-	Scanner sc = new Scanner(System.in);	
-	
-	ArrayList<StudentHasA> arr = new ArrayList<StudentHasA>(); // 필드에 StudentHasA를 ArrayList로 객체 생성
+public class AllStudentsSet {
 
-	public AllStudents() {
+	int button = 1;
+	Scanner sc = new Scanner(System.in);
+
+	HashSet<StudentHasA> arr = new HashSet<StudentHasA>(); // 필드에 StudentHasA를 HashSet로 객체 생성
+
+	public AllStudentsSet() {
 
 	}
 
-	public AllStudents(String name, int kor, int eng, int mat) {
+	public AllStudentsSet(String name, int kor, int eng, int mat) {
 
 	}
 
@@ -43,49 +44,45 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 		stu.setEng(sc.nextInt()); // 영어 점수
 		stu.setMat(sc.nextInt()); // 수학 점수
 
-		arr.add(stu); // ArrayList에는 StudentHasA객체만 담을 수 있으므로 우선 StudentHasA 객체를 생성해줘야 한다.
+		arr.add(stu); // HashSet에는 StudentHasA객체만 담을 수 있으므로 우선 StudentHasA 객체를 생성해줘야 한다.
 
 	}
 
 	public void stuModify() { // 학생 성적 수정
-		StudentHasA stu = new StudentHasA();
-		int s = 0; // 수정된 점수 입력값
 
 		System.out.println("누구를 수정하시겠습니까? 이름을 입력해주세요");
-		String nameIndex = sc.next();
+		String nameIndex = sc.next(); // 이름을 입력받음
 
-		for (int i = 0; i < arr.size(); i++) {
-
-			if (arr.get(i).getName().equals(nameIndex)) { // stu객체 속 이름을 getter해서 입력받은 이름과 동일하다면
-
+		for (Iterator<StudentHasA> it = arr.iterator(); it.hasNext();) { // 현재 set구조의 요소들을 순서대로 처리하기 위해 Iterator 객체로 반환함
+			StudentHasA a = it.next(); //next 함수 더이상 중복 호출 안되도록 여기서 변수 지정!
+			
+			if (a.getName().equals(nameIndex)) { // 입력받은 이름과 동일한 이름이 있는 객체 stu가 발견된다면
+			
 				System.out.println("무엇을 수정하시겠습니까? 숫자로 골라주세요");
 				System.out.print("1. 국어" + "\t" + "2. 영어" + "\t" + "3. 수학" + "\t" + "4. 종료");
 				int choice = sc.nextInt();
-
+			
 				switch (choice) {
 				case 1:
 					System.out.println("수정된 점수를 입력해주세요");
-					s = sc.nextInt();
-					arr.set(i, stu).setKor(s);
-					// all[i].setKor(s);
+					a.setKor(sc.nextInt()); // a는 stu라는 객체이므로 여기서 setter 함수로 국어점수를 입력해준다.
 					System.out.println("수정완료!");
-					break;
+					return;
 				case 2:
 					System.out.println("수정된 점수를 입력해주세요");
-					s = sc.nextInt();
-					arr.set(i, stu).setEng(s);
+					a.setEng(sc.nextInt());
 					System.out.println("수정완료!");
-					break;
+					return;
 				case 3:
 					System.out.println("수정된 점수를 입력해주세요");
-					s = sc.nextInt();
-					arr.set(i, stu).setMat(s);
+					a.setMat(sc.nextInt());
 					System.out.println("수정완료!");
-					break;
+					return;
 				case 4:
 					System.out.println("종료합니다");
 					return;
 				}
+
 			}
 		}
 	}
@@ -95,14 +92,15 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 		System.out.println("누구를 조회하시겠습니까? 이름을 입력해주세요");
 		String nameIndex = sc.next();
 
-		for (int i = 0; i < arr.size(); i++) {
-			if (arr.get(i).getName().equals(nameIndex)) {
-				System.out.println(arr.get(i));
-			} else {
-
-				System.out.println("존재하지 않는 이름 입니다");
+		for (Iterator<StudentHasA> it = arr.iterator(); it.hasNext();) {
+			StudentHasA a= it.next(); // it.next()를 사용할 때는 한번만 호출해야 된다. 다음 반복문에서도 it.next()를 사용하게 되면 오류 발생. 따라서 변수로 지정해주자. 
+			
+			if (a.getName().equals(nameIndex)) {
+				System.out.println(a);
+				return;
 			}
 		}
+		System.out.println("존재하지 않는 이름 입니다"); // if문의 반대가 아닌 for문의 반대상황이어야 출력되는 위치!! 
 	}
 
 	public void stuPrint() { // 전체 학생 성적 출력
@@ -113,7 +111,7 @@ public class AllStudents { // 학생 성적 관리 ArrayList로 담기
 
 	public static void main(String[] args) {
 
-		AllStudents allstu = new AllStudents();
+		AllStudentsSet allstu = new AllStudentsSet();
 
 		do {
 			allstu.main();
