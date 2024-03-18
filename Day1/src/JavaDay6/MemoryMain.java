@@ -15,7 +15,7 @@ public class MemoryMain {
 			int num = sc.nextInt();
 			
 			if(num == 1) {
-				m=ms;
+				m=ms; //동적바인딩 
 			}else{
 				m=mq;
 				//if(m.arr[m.front] != 0)
@@ -29,11 +29,11 @@ public class MemoryMain {
 					int n = sc.nextInt();
 					
 					if(n == 1) {
-						m.push(sc.nextInt());
+						m.push(sc.nextInt()); //push는 매개변수 int data를 받는다. 
 						
 					}else if(n == 2) {
 						System.out.println(m.pop());						
-					}else break;
+					}else break; // break는 while문 벗어남. 
 				}
 //			}else if(num == 2) {
 //				
@@ -51,7 +51,7 @@ public class MemoryMain {
 //				}
 //			}else System.exit(0);
 //		
-		}while(true);
+		}while(true); // while 조건식이 true 이므로 do문은 계속 수행된다. 
 //	
 	}
 	
