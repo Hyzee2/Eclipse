@@ -9,6 +9,10 @@ public class Babygin {
 	int[] input = new int[6]; // 배열의 길이가 6인 input 배열 생성
 	int temp = 0; // 자리를 바꾸기 위해 임시로 담아두는 공간, 초기화 0 필수
 	int frequency = 0; // 배열에서 같은 숫자가 등장한 횟수
+	
+	int[] getInput() {
+		return this.input;
+	}
 
 	void random() { // 총 6자리 수의 정수 랜덤 생성하고 오름차순으로 정렬하는 메서드
 		// System.out.println("여기는 random 시작");
@@ -66,12 +70,12 @@ public class Babygin {
 
 	}
 
-	public static void main(String[] args) {
-		Babygin bg = new Babygin();
+	void main() {
+		//Babygin bg = new Babygin();
 
-		bg.random();
-		bg.freq();
-		bg.result(bg.input);
+		random();
+		freq();
+		result(getInput());
 
 	}
 

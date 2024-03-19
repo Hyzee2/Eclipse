@@ -10,7 +10,7 @@ public class Baseball {
 	int repeatCount = 0;
 	int total;
 
-	int getRepeatCount() {
+	public int getRepeatCount() {
 		return repeatCount;
 	}
 
@@ -50,7 +50,7 @@ public class Baseball {
 
 	}
 
-	void getTotal() {
+	public void getTotal() {
 		total += repeatCount;
 	}
 
@@ -67,32 +67,32 @@ public class Baseball {
 		return att;
 	}
 
-	public static void main(String[] args) {
+	public void main() {
 		Scanner sc = new Scanner(System.in);
-		Baseball bb = new Baseball();
+//		Baseball bb = new Baseball();
 
 		System.out.println("게임을 몇번 진행 하시겠습니까?");
 		int count = sc.nextInt();
 		for (int i = 0; i < count; i++) {
-			bb.computer();
-			//System.out.print(bb.com[0]+" "+bb.com[1]+" "+bb.com[2]); // 컴퓨터의 랜덤 수 표출
+			computer();
+			// System.out.print(bb.com[0]+" "+bb.com[1]+" "+bb.com[2]); // 컴퓨터의 랜덤 수 표출
 			System.out.println();
 
 			do {
 
-				bb.input();
-				bb.result();
+				input();
+				result();
 
-				System.out.println("정답까지 시도한 횟수는 " + bb.getRepeatCount() + "입니다");
+				System.out.println("정답까지 시도한 횟수는 " + getRepeatCount() + "입니다");
 
-			} while (bb.strikeCount < 3);
-			
+			} while (strikeCount < 3);
+
 			System.out.println();
 			System.out.println("게임 끝!");
 			System.out.println();
-			System.out.println("총게임 진행 횟수는" + bb.getRepeatCount() + "입니다");
-			bb.getTotal();
-			System.out.println("평균 시도 횟수는 " + (float) bb.total / (i + 1) + "입니다");
+			System.out.println("총게임 진행 횟수는" + getRepeatCount() + "입니다");
+			getTotal();
+			System.out.println("평균 시도 횟수는 " + (float) total / (i + 1) + "입니다");
 
 		}
 
