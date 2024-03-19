@@ -6,6 +6,10 @@ public class Flowchart {
 
 	int[] input = new int[4]; // 배열의 길이가 4인 input 배열 생성
 	int temp = 0; // 자리를 바꾸기 위해 임시로 담아두는 공간, 초기화 0 필수
+	
+	int[] getInput() {
+		return this.input;
+	}
 
 	void number(int i) { // 숫자를 배열로 넣어주는 메서드
 
@@ -84,37 +88,6 @@ public class Flowchart {
 			}
 
 		}
-
-//		if(input[0]>=input[1]) { // [0] >= [1] 이면 
-//			temp = input[0]; // [0]을 temp에 담기
-//			input[0] = input[1]; //[1]을 [0]에 담기
-//			input[1] = temp; // temp을 [1]에 담기  // 최종: [0] <-> [1]
-//			System.out.println("지금 첫번째 두번째 비교");
-//		}
-//		if(input[1]>=input[2]) { //[1]이랑 [2]비교
-//			temp = input[1];
-//			input[1] = input[2];
-//			input[2] = temp;
-//			System.out.println("지금 두번째 세번째 비교");
-//		}
-//		if(input[2]>=input[3]) { //[2]이랑 [3]비교
-//			temp = input[2];
-//			input[2] = input[3];
-//			input[3] = temp;
-//			System.out.println("지금 세번째 네번째 비교");
-//		}
-//		if(input[1]>=input[2]) { //[1]이랑 [2]비교
-//			temp = input[1];
-//			input[1] = input[2];
-//			input[2] = temp;
-//			System.out.println("지금 두번째 세번째 비교");
-//		}
-//		if(input[0]>=input[1]) { //[0]이랑 [1]비교
-//			temp = input[0];
-//			input[0] = input[1];
-//			input[1] = temp;
-//			System.out.println("지금 첫번째 두번째 비교");
-//		}
 		return input;
 
 	}
@@ -128,7 +101,7 @@ public class Flowchart {
 		}
 //		System.out.println("지금 0이 몇개인지 찾았습니다");
 //		System.out.println(count);
-		switch (count) {
+		switch (count) { // 0의 개수에 따라서 첫번째 자리로 옮길 인덱스 위치가 달라지므로 switch문 사용  
 		case 1:
 //			System.out.println("0이" + count + "개 일때 실행");
 			temp = input[1];
@@ -153,17 +126,17 @@ public class Flowchart {
 		}
 	}
 
-	public static void main(String[] args) {
+	void main() {
 
-		Flowchart fc = new Flowchart();
+		//Flowchart fc = new Flowchart();
 
 		for (int i = 1000; i < 10000; i++) { // 1000부터 9999까지 숫자 생성
-			fc.number(i);
+			number(i);
 			System.out.print("\t");
-			fc.change();
-			
-			fc.zeroChange();
-			for (int s : fc.input) {
+			change();
+
+			zeroChange();
+			for (int s : getInput()) {
 				System.out.print(s);
 			}
 			System.out.println();
