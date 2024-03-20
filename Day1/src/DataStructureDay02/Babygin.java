@@ -38,7 +38,7 @@ public class Babygin {
 
 		int p = 0; // baby-gin 임을 확인하기 위한 임시 카운터
 
-		if ((input[0] + input[2]) / 2 == input[1]) { // 연속하는 숫자의 특징으로 체크
+		if ((input[0] + input[2]) / 2 == input[1] && input[2] == input[1]+1) { // 연속하는 숫자의 특징으로 체크
 			p++;
 		} else if (input[0] + input[2] == 0) { // 0이면 나눗셈 안되기 때문에 별도 조건문으로 체크
 			p++;
@@ -56,7 +56,7 @@ public class Babygin {
 
 	}
 
-	void freq() { // input 배열 안에 중복된 요소 수 확인하는 메서드
+	void freq() { // input 배열 안에 중복된 요소 수 확인하는 메서드 [count 정렬]
 		int[] cnt = new int[10]; // 비어있는 길이 10의 cnt 배열 생성 (why? input의 요소는 0~9까지 나올 수 있기 때문
 		for (int c : input) {
 			cnt[c]++; // input 배열의 요소를 cnt배열의 인덱스 값으로 넣어서 몇 번 카운트 되는지
