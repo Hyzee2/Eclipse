@@ -44,7 +44,7 @@ public class Flowchart2 { // 정돈된 수
 
 		String w = Integer.toString(n); // int를 String으로 변환
 
-		int[] input = new int[w.length()];
+		int[] input = new int[w.length()]; // String 길이만큼 배열 생성
 
 		for (int j = 0; j < w.length(); j++) { // 문자열 한 자리씩 배열에 넣기
 			input[j] = Character.getNumericValue(w.charAt(j)); // 다시 char형을 int형으로 변환
