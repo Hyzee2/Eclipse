@@ -10,7 +10,7 @@ public class NewStudent {
 	private Subject eng;
 	private int total;
 	private float avg;
-	NewStudent next;
+	NewStudent next; // NewStudent 객체의 다음을 가리키는 참조변수  
 	
 	public NewStudent() {
 		name = new Name();
@@ -24,7 +24,8 @@ public class NewStudent {
 		this.kor = kor;
 		this.eng = eng;
 		this.mat = mat;
-	}
+		this.next = null;
+		}
 	
 
 	public void setName(String name) { // 외부 클래스에 있는 메서드를 사용하는 방법
