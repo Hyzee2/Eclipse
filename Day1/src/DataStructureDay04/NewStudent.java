@@ -73,7 +73,7 @@ public class NewStudent {
 	@Override
 	public String toString() {
 		
-		String a ="이름은 " + getName()+ ", 국어점수는 " + getKor() + ", 영어점수는 " + getEng() + ", 수학점수는 " + getMat() + ", 총점은 " + getTotal() + ", 평균은 " + getAvg();
+		String a ="이름: " + getName()+ ", 국어점수: " + getKor() + ", 영어점수: " + getEng() + ", 수학점수: " + getMat() + ", 총점: " + getTotal() + ", 평균: " + getAvg();
 		return a;
 	}
 

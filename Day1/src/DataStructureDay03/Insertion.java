@@ -7,6 +7,7 @@ public class Insertion {
 
 	int temp = 0;
 
+
 	void insertionSort(int[] arr) { // 오름차순으로 삽입정렬
 		int cnt = 0; // 삽입된 횟수 카운트
 		int ch = 0; // 비교 횟수 카운트
@@ -29,23 +30,28 @@ public class Insertion {
 		}
 		System.out.println("실제로 삽입정렬된 횟수는 :" + cnt);
 		System.out.println("실제로 비교된 횟수는 :" + ch);
+
 	}
 
 	public static void main(String[] args) {
+
 		Insertion is = new Insertion();
+
 		int data[] = new int[10];
 		// Random random = new Random();
 
 		for (int i = 0; i < 10; i++) {
 			data[i] = (int) Math.floor(Math.random() * 10);
+
 		}
 
 		is.insertionSort(data);
 
+
 		for (int i = 0; i < 9; i++) {
 
-			if (data[i] > data[i + 1]) {
 
+			if (data[i] > data[i + 1]) {
 				System.out.println("Error");
 			}
 			System.out.println(data[i]);
