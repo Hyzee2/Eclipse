@@ -59,7 +59,7 @@ public class LinkedExam {
 		} else {
 			cur = head; // cur은 head로 초기화
 			for (int i = 1; i < num - 1; i++) {
-				cur = cur.next; // 반복을 수행해야 되는 부분은 커서의 이동 부분
+				cur = cur.next; // 반복을 수행해야 되는 부분은 커서의 이동 부분(두번째로 넣을때는 반복문이 실행안된 상태의 cur이어야 한다.)
 			}
 			newNode.next = cur.next;
 			cur.next = newNode;
