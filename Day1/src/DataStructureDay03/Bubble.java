@@ -4,7 +4,7 @@ public class Bubble {
 
 	static int[] data = new int[0];
 
-	static void change(int[] data, int i, int j) { // 앞에 있는 큰 수를 뒤에 있는 작은 수왕 자리를 바꿔주는 메서드 
+	static void change(int[] data, int i, int j) { // 오름차순으로 정렬해주는 메서드  
 		int temp = data[i];
 		data[i] = data[j];
 		data[j] = temp;
@@ -12,15 +12,15 @@ public class Bubble {
 	}
 
 	static void bubbleSort(int[] data) {
-		int cnt = 0; // 바꾼 횟수 카운트
-		int innerfor = 0;
+		int cnt = 0; // 자리를 바꾼 횟수 카운트
+		int innerfor = 0; // 비교를 한 횟수 카운트 
 		int outerfor = 0;
 
 		for (int i = 0; i < data.length - 1; i++) { // data.length-1을 하는 이유는 i=0번째 돌때 이미 제일 큰 수는 맨 마지막으로 위치하기 때문
 
-			for (int j = i + 1; j < data.length; j++) {
-				if (data[i] > data[j]) {
-					change(data, i, j);
+			for (int j = 0; j < data.length-1-i; j++) {
+				if (data[j] > data[j+1]) {
+					change(data, j+1, j);
 					cnt++;
 				}
 
