@@ -12,7 +12,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 	NewStudent prev; // cur의 이전에 위치
 	NewStudent stu; // newNode와 동일
 	NewStudent del; // 삭제할 Node
-	NewStudent temp; // 수정한 값을 다시 재정렬할 때 임시로 넣어둘 참조변수 
+	NewStudent temp; // 수정한 값을 다시 재정렬할 때 임시로 넣어둘 참조변수
 	int button = 1;
 
 	Scanner sc = new Scanner(System.in);
@@ -63,19 +63,19 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 
 		else { // 중간에 삽입할 때
 			cur = head; // 커서는 처음부터 탐색
-			prev = null; // 커서의 이전 위치는 null
+			// prev = null; // 커서의 이전 위치는 null
 
-			while (cur != null && cur.getAvg() > stu.getAvg()) { // 삽입을 해야하는 위치 찾기
+			while (cur != null && cur.next != null && cur.next.getAvg() > stu.getAvg()) { // 삽입을 해야하는 위치 찾기
 				// while안의 조건문을 만족할 때 반복문 실행하는 것이므로 내림차순하려면 cur > stu로 작성해야 한다!
-				prev = cur;
+				// prev = cur;
 				cur = cur.next;
 			}
 			if (cur == head) { // 새로운 node 값이 제일 클 때
 				stu.next = head;
 				head = stu;
 			} else { // 새로운 node가 중간에 삽입되어야 할 때
-				stu.next = prev.next;
-				prev.next = stu;
+				stu.next = cur.next;
+				cur.next = stu;
 			}
 
 			cur = head; // 초기화하고 출력
@@ -86,9 +86,9 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 
 	public NewStudent stuModify() { // 학생 성적 수정
 		stuSearch(); // 이름으로 검색
-		
+
 		int s = 0; // 수정할 점수
-		
+
 		System.out.println("무엇을 수정하시겠습니까? 숫자로 골라주세요");
 		System.out.print("1. 국어" + "\t" + "2. 영어" + "\t" + "3. 수학" + "\t" + "4. 종료");
 		int choice = sc.nextInt();
@@ -116,11 +116,14 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 			break;
 
 		}
-		
+		if(cur.next != null) { // cur가 중간에 위치할 때 
 		temp = cur; // 수정된 cur의 노드를 temp에 잡아둔다
-		prev.next = temp.next;
-
-		return temp; // 순서를 재배치해주기 위해 수정된 학생 객체인 temp를 반환해준다.  
+		cur.next = temp.next;
+		} else if(cur.next == null) { // cur가 맨 끝에 위치할 때 
+			cur.next = temp;
+			temp.next = null;
+		}
+		return temp; // 순서를 재배치해주기 위해 수정된 학생 객체인 temp를 반환해준다.
 	}
 
 	public NewStudent stuSearch() { // 학생 이름으로 검색
@@ -128,26 +131,45 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		System.out.println("학생 이름을 입력해주세요");
 		String nameIndex = sc.next();
 
-		cur = head; // 초기화
-		prev = null;
+		cur.next = head; // 초기화
 		
-		while(cur != null) {
-			if(cur.getName().equals(nameIndex)) {
-				System.out.println(cur.toString());
-				break;
-			}else {
-				prev = cur;
-				cur = cur.next;
+		while (cur != null) {
+			System.out.println("while문 시작");
+			if (cur.next != null) {
+				System.out.println("첫번째 ");
+				if (cur.next.getName().equals(nameIndex)) {
+					System.out.println(cur.next.toString());
+					break;
+				} else {
+					System.out.println("두번째");
+					// prev = cur;
+//				if(cur.next != null) {
+					cur.next = cur.next.next;
+//				}
+//				if(cur != null) {
+//					break;
+//				}
+
+				}
+			} else if (cur.next == null) {
+				System.out.println("세번쨰");
+				if (cur.getName().equals(nameIndex)) {
+					System.out.println(cur.toString());
+					break;
+				} else {
+					System.out.println("입력하신 이름은 없습니다. ");
+				}
 			}
 		}
-		return cur; // 찾은 위치의 노드를 반환해야 이후에 수정기능이 가능하다!
+
+		return cur; // 찾은 위치의 전 위치를 반환
 
 	}
 
 	public void stuPrint() { // 전체 학생 성적 출력(평균 성적 내림차순)
 		System.out.println("평균 성적 순으로 출력합니다");
 		cur = head; // 초기화
-		
+
 		if (head != null) {
 			while (cur != null) { // 끝까지 커서가 돈다
 				System.out.print(cur.toString() + "\n");
@@ -162,8 +184,8 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		NewStudent del = new NewStudent();
 		stuSearch();
 
-		del = cur;
-		prev.next = del.next;
+		del = cur.next;
+		cur.next = del.next;
 		del.next = null;
 		del = null;
 	}
