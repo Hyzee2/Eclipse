@@ -13,7 +13,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 	NewStudent stu; // newNode와 동일
 	NewStudent del; // 삭제할 Node
 	NewStudent temp; // 수정한 값을 다시 재정렬할 때 임시로 넣어둘 참조변수
-	int size=0;
+	int size = 0;
 	int button = 1;
 
 	Scanner sc = new Scanner(System.in);
@@ -42,7 +42,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 
 	public NewStudent stuInput() { // 학생 정보 입력 후, 반환
 		stu = new NewStudent();
-		
+
 		System.out.println("학생의 이름, 국어, 영어, 수학 점수를 차례로 입력하세요");
 
 		stu.setName(sc.next());
@@ -51,7 +51,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		stu.setMat(sc.nextInt());
 
 		System.out.println("입력한 값은 다음과 같습니다" + "\n" + stu.toString()); // 마지막 위치에서 새로 추가한 학생 객체 내용 출력
-		size ++;
+		size++;
 		return stu;
 	}
 
@@ -62,11 +62,11 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 			cur = head;
 		}
 
-		else { // 중간에 삽입할 때
-			cur = head; // 커서는 처음부터 탐색
-			// prev = null; // 커서의 이전 위치는 null
+		else { // 기존에 리스트가 있을 때
+			cur = head;
+			prev = null;
 
-			while (cur.next != null && cur.getAvg() > stu.getAvg()) { // 삽입을 해야하는 위치 찾기
+			while (cur != null && cur.getAvg() > stu.getAvg()) { // 삽입을 해야하는 위치 찾기
 				// while안의 조건문을 만족할 때 반복문 실행하는 것이므로 내림차순하려면 cur > stu로 작성해야 한다!
 				// cur가 null이거나 cur.next의 값이 stu의 값보다 작을때 반복문 빠져나온다.
 				prev = cur;
@@ -74,29 +74,32 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 			}
 
 			if (cur == head) { // 새로운 node 값이 제일 클 때
-				stu.next = cur;
+				stu.next = head;
 				head = stu;
 
-			} else if (cur.next != null) { // 새로운 node가 중간에 삽입되어야 할때 
-				stu.next = cur;
+			} else {
+				stu.next = prev.next;
 				prev.next = stu;
-
-			} else { // 새로운 node가 가장 작을 때 
-				cur.next = stu;
-				stu.next = null;
 			}
 
+//			else if (cur.next != null) { // 새로운 node가 중간에 삽입되어야 할때
+//				stu.next = prev.next;
+//				prev.next = stu;
+//
+//			} else { // 새로운 node가 가장 작을 때 (cur.next = null 일때)
+//				cur.next = stu;
+//				stu.next = null;
+//			}
 		}
-		//cur = head; // 초기화하고 출력
 	}
 
 	public NewStudent stuModify() { // 학생 성적 수정
 		stuSearch(); // 이름으로 검색
-		
-		cur = prev.next;
+
+		// prev.next = cur;
+
 		int s = 0; // 수정할 점수
-		
-		NewStudent temp = new NewStudent();
+
 		System.out.println("무엇을 수정하시겠습니까? 숫자로 골라주세요");
 		System.out.print("1. 국어" + "\t" + "2. 영어" + "\t" + "3. 수학" + "\t" + "4. 종료");
 		int choice = sc.nextInt();
@@ -124,21 +127,21 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 			break;
 
 		}
-		
+
+		temp = cur;
+
 		if (cur == head) { // cur가 첫번째 위치할 때
-			temp.next = head.next;
-			head = temp;
-//		} else if (cur.next == null) { // cur가 맨 끝에 위치할 때
-//			
-//			temp.next = null;
-//			prev.next = temp;
-			
-		} else { // cur가 중간에 위치할 때 
-			temp.next = cur.next;
-			prev.next = temp;
+			temp = head;
+			head = head.next;
+
+		} else { // cur가 중간에 위치할 때
+			temp = prev.next;
+			prev.next = temp.next;
 		}
-		
-		return this.temp = temp; // 순서를 재배치해주기 위해 수정된 학생 객체인 temp를 반환해준다.
+
+		temp.next = null;
+
+		return temp; // 순서를 재배치해주기 위해 수정된 학생 객체인 temp를 반환해준다.
 	}
 
 	public NewStudent stuSearch() { // 학생 이름으로 검색
@@ -147,32 +150,49 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		String nameIndex = sc.next();
 
 		cur = head; // 초기화
-		
+		prev = null;
 
-		for(int i =0; cur != null && i<size; i++) {
-			
-			// System.out.println("while문 시작");
+		for (int i = 0; cur != null && i < size; i++) {
 
-			// System.out.println("첫번째 ");
 			if (cur.getName().equals(nameIndex)) {
 				System.out.println(cur.toString());
 				break;
-			} 
+			}
 			prev = cur;
 			cur = cur.next;
 		}
-		
-		if (cur == null) {
-			// System.out.println("세번쨰");
-//			if (cur.getName().equals(nameIndex)) {
-//				System.out.println(cur.toString());
-//
-//			} else {
-				System.out.println("입력하신 이름은 없습니다. ");
-//			}
+
+		if (cur == null) { // for문에서 cur가 끝까지 이동했을 때
+			System.out.println("입력하신 이름은 없습니다. ");
 		}
-		
-		return prev;
+
+		return cur; // 이름을 찾은 노드의 위치 반환
+
+	}
+
+	public NewStudent studelSearch() { // 학생 이름으로 검색
+
+		System.out.println("학생 이름을 입력해주세요");
+		String nameIndex = sc.next();
+
+		cur = head; // 초기화
+		prev = null;
+
+		for (int i = 0; cur != null && i < size; i++) {
+
+			if (cur.getName().equals(nameIndex)) {
+				System.out.println(cur.toString());
+				break;
+			}
+			prev = cur;
+			cur = cur.next;
+		}
+
+		if (cur == null) { // for문에서 cur가 끝까지 이동했을 때
+			System.out.println("입력하신 이름은 없습니다. ");
+		}
+
+		return prev; // 이름을 찾은 노드의 전 위치 반환
 
 	}
 
@@ -192,11 +212,20 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 
 	public void stuDel() { // 이름으로 검색 한 후, 선택 학생 삭제
 		NewStudent del = new NewStudent();
-		stuSearch();
-		cur = prev.next;
+		cur = studelSearch(); // cur = prev
 
-		del = prev.next;
-		prev.next = del.next;
+		if (cur == null) { // 첫번째 위치를 삭제할 때
+			del = head;
+			head = head.next;
+		}
+//		}else if(cur.next.next == null) { // 마지막 위치를 삭제할 때 
+//			
+//			cur.next = null;
+//		}
+		else { // 중간 위치를 삭제할 때
+			del = cur.next;
+			cur.next = del.next;
+		}
 		del.next = null;
 		del = null;
 	}

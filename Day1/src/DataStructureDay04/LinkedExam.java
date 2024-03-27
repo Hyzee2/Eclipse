@@ -82,8 +82,8 @@ public class LinkedExam {
 		cur = head;
 
 		if (num2 == 1) {
-			head = cur.next;
-
+			del = head;
+			head = head.next;
 		} else {
 			cur = head;
 			for (int i = 1; i < num2 - 1; i++) {
