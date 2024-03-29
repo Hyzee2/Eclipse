@@ -1,11 +1,16 @@
-package DataStructureDay04;
+package Database01;
 
 import java.util.Scanner;
 
-import JavaDay4.StudentHasA;
-import JavaDay8.AllStudents;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class StudentLink { // 학생성적관리 Linked List로 만들기
+public class StudentLink {
+	Connection conn;
+	PreparedStatement pstmt;
 
 	NewStudent head; // 맨 처음에 위치한 Node
 	NewStudent cur; // 현재 위치
@@ -19,11 +24,39 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 	Scanner sc = new Scanner(System.in);
 
 	public StudentLink() {
+		this("jdbc:mysql://localhost:3306/myprogram?serverTimezone=UTC", "root", "qwe123!@#");
 		cur = head; // 객체 생성할 때마다 cur 초기화
+	}
+
+	public StudentLink(String url, String user, String pw) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, pw);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public StudentLink(int id, String name, int kor, int eng, int mat) {
 
+	}
+
+	private void createDB() {
+		try {
+			String s = "drop table if exists student;";
+			String sql = "create table student(\r\n" + "id int,\r\n" + "name varchar(20),\r\n" + "kor int,\r\n"
+					+ "eng int,\r\n" + "mat int,\r\n" + "primary key(id)\r\n" + ")\r\n";
+
+			pstmt = conn.prepareStatement(s);
+			pstmt.executeUpdate();
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int main() {
@@ -44,7 +77,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		stu = new NewStudent();
 
 		System.out.println("학생의 id, 이름, 국어, 영어, 수학 점수를 차례로 입력하세요");
-		
+
 		stu.setId(sc.nextInt());
 		stu.setName(sc.next());
 		stu.setKor(sc.nextInt());
@@ -56,7 +89,25 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		return stu;
 	}
 
-	void stuFiter(NewStudent stu) { // 삽입정렬 (평균점수 내림차순)
+	private void dbInput() {
+		try {
+			String sql = "insert into student values(?,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, stu.getId());
+			pstmt.setString(2, stu.getName());
+			pstmt.setInt(3, stu.getKor());
+			pstmt.setInt(4, stu.getEng());
+			pstmt.setInt(5, stu.getMat());
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void stuFiter(NewStudent stu) { // 삽입정렬 (평균점수 내림차순)
 
 		if (head == null) { // 비어있는 리스트일 때
 			head = stu;
@@ -83,21 +134,11 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 				prev.next = stu;
 			}
 
-//			else if (cur.next != null) { // 새로운 node가 중간에 삽입되어야 할때
-//				stu.next = prev.next;
-//				prev.next = stu;
-//
-//			} else { // 새로운 node가 가장 작을 때 (cur.next = null 일때)
-//				cur.next = stu;
-//				stu.next = null;
-//			}
 		}
 	}
 
-	public NewStudent stuModify() { // 학생 성적 수정
+	public NewStudent stuModify() throws SQLException { // 학생 성적 수정
 		stuSearch(); // 이름으로 검색
-
-		// prev.next = cur;
 
 		int s = 0; // 수정할 점수
 
@@ -109,18 +150,45 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 			System.out.println("수정된 점수를 입력해주세요");
 			s = sc.nextInt();
 			cur.setKor(s);
+			try {
+				String sql = "update student set kor=? where name=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cur.getKor());
+				pstmt.setString(2, cur.getName());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			System.out.println("수정완료!");
 			break;
 		case 2:
 			System.out.println("수정된 점수를 입력해주세요");
 			s = sc.nextInt();
 			cur.setEng(s);
+			try {
+				String sql = "update student set eng=? where name=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cur.getEng());
+				pstmt.setString(2, cur.getName());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			System.out.println("수정완료!");
 			break;
 		case 3:
 			System.out.println("수정된 점수를 입력해주세요");
 			s = sc.nextInt();
 			cur.setMat(s);
+			try {
+				String sql = "update student set mat=? where name=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cur.getMat());
+				pstmt.setString(2, cur.getName());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			System.out.println("수정완료!");
 			break;
 		case 4:
@@ -145,7 +213,7 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		return temp; // 순서를 재배치해주기 위해 수정된 학생 객체인 temp를 반환해준다.
 	}
 
-	public NewStudent stuSearch() { // 학생 이름으로 검색
+	public NewStudent stuSearch() throws SQLException { // 학생 이름으로 검색
 
 		System.out.println("학생 이름을 입력해주세요");
 		String nameIndex = sc.next();
@@ -156,7 +224,32 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		for (int i = 0; cur != null && i < size; i++) {
 
 			if (cur.getName().equals(nameIndex)) {
+//				System.out.println(cur.toString());
+				try {
+					String sql = "select * from student where name=?";
+					pstmt = conn.prepareStatement(sql);
+
+					pstmt.setString(1, cur.getName());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				ResultSet rs = pstmt.executeQuery();
+				while (rs.next()) {
+					int a = cur.getId();
+					a = rs.getInt(1);
+					String b = cur.getName();
+					b = rs.getString(2);
+					int c = cur.getId();
+					c = rs.getInt(3);
+					int d = cur.getId();
+					d = rs.getInt(4);
+					int e = cur.getId();
+					e = rs.getInt(5);
+				}
+
 				System.out.println(cur.toString());
+
 				break;
 			}
 			prev = cur;
@@ -218,39 +311,62 @@ public class StudentLink { // 학생성적관리 Linked List로 만들기
 		if (cur == null) { // 첫번째 위치를 삭제할 때
 			del = head;
 			head = head.next;
+			try {
+				String sql = "delete from student where name=?";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, del.getName());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
 		}
-//		}else if(cur.next.next == null) { // 마지막 위치를 삭제할 때 
-//			
-//			cur.next = null;
-//		}
+
 		else { // 중간 위치를 삭제할 때
 			del = cur.next;
 			cur.next = del.next;
+			try {
+				String sql = "delete from student where name=?";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, del.getName());
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		del.next = null;
 		del = null;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
+
 		StudentLink link = new StudentLink();
+		System.out.println("DB Connection Success");
 
 		do {
+			if (link.head == null) {
+				link.createDB();
+			}
+
 			link.main();
 			switch (link.button) {
 			case 1:
-				link.stuFiter(link.stuInput());
+				link.stuFiter(link.stuInput()); // 학생 정보 입력
+				link.dbInput();
 				break;
 			case 2:
-				link.stuFiter(link.stuModify());
+				link.stuFiter(link.stuModify()); // 학생 점수 수정
 				break;
 			case 3:
-				link.stuSearch();
+				link.stuSearch(); // 학생 검색
 				break;
 			case 4:
-				link.stuPrint();
+				link.stuPrint(); // 전체 학생 출력
 				break;
 			case 5:
-				link.stuDel();
+				link.stuDel(); // 학생 삭제
 				break;
 			case 6:
 				System.out.println("프로그램을 종료합니다. ");

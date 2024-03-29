@@ -1,4 +1,4 @@
-package DataStructureDay04;
+package Database01;
 
 import JavaDay4.Name;
 import JavaDay4.Subject;
