@@ -2,6 +2,8 @@ package Database01;
 
 import java.util.Scanner;
 
+import com.mysql.cj.jdbc.DatabaseMetaData;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,12 +25,14 @@ public class StudentLink {
 
 	Scanner sc = new Scanner(System.in);
 
-	public StudentLink() {
-		this("jdbc:mysql://localhost:3306/myprogram?serverTimezone=UTC", "root", "qwe123!@#");
-		cur = head; // 객체 생성할 때마다 cur 초기화
+	public StudentLink() throws SQLException { // 생성자 함수; 프로그램 실행될 때마다 자동 수행
+		this("jdbc:mysql://localhost:3306/myprogram?serverTimezone=UTC", "root", "375@hyunji"); // mysql과 연동한다.
+
+		createTable(); // 테이블을 생성한다. 이미 존재하면 패스
+
 	}
 
-	public StudentLink(String url, String user, String pw) {
+	public StudentLink(String url, String user, String pw) { // 프로그램 실행하면 드라이버 연결 작업
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, pw);
@@ -43,17 +47,41 @@ public class StudentLink {
 
 	}
 
-	private void createDB() {
+	private void loadDB() throws SQLException { // db의 전체 데이터를 연결하는 것도 4번 메뉴에서만 필요하지 않을까..?
+		String sql = "select * from student"; // 테이블에 존재하는 데이터 조회
+
+		pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery(); // 쿼리 실행
+
+		while (rs.next()) { // 조회한 데이터를 stu 객체에다가 담아주는 과정
+			NewStudent stu = new NewStudent(); // 객체 생성
+
+			stu.setId(rs.getInt(1));
+			stu.setName(rs.getString(2));
+			stu.setKor(rs.getInt(3));
+			stu.setEng(rs.getInt(4));
+			stu.setMat(rs.getInt(5)); // stu 객체에다가 db 데이터들 담아주고
+
+			stuFiter(stu); // 다시 완성된 stu 객체 삽입 필터 돌려서 java 내에 내림차순으로 링크를 연결시킨다.
+
+		}
+	}
+
+	private void createTable() {
 		try {
-			String s = "drop table if exists student;";
-			String sql = "create table student(\r\n" + "id int,\r\n" + "name varchar(20),\r\n" + "kor int,\r\n"
-					+ "eng int,\r\n" + "mat int,\r\n" + "primary key(id)\r\n" + ")\r\n";
+			DatabaseMetaData metaData = (DatabaseMetaData) conn.getMetaData();
+			ResultSet tables = metaData.getTables(null, null, "student", null);
 
-			pstmt = conn.prepareStatement(s);
-			pstmt.executeUpdate();
+			if (tables.next()) {
+				System.out.println("테이블이 이미 존재합니다. ");
+			} else {
 
-			pstmt = conn.prepareStatement(sql);
-			pstmt.executeUpdate();
+				String sql = "create table student(\r\n" + "id int,\r\n" + "name varchar(20),\r\n" + "kor int,\r\n"
+						+ "eng int,\r\n" + "mat int,\r\n" + "primary key(id)\r\n" + ")\r\n";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.executeUpdate();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -73,39 +101,167 @@ public class StudentLink {
 		return button;
 	}
 
-	public NewStudent stuInput() { // 학생 정보 입력 후, 반환
+	public NewStudent stuInput() throws SQLException { // 학생 정보 입력 후, 반환
 		stu = new NewStudent();
+		int id = 0;
 
-		System.out.println("학생의 id, 이름, 국어, 영어, 수학 점수를 차례로 입력하세요");
+		do {
+			System.out.println("학생의 id를 입력하세요");
 
-		stu.setId(sc.nextInt());
+			stu.setId(sc.nextInt());
+
+			String sql2 = "select id from student where id=?";
+			pstmt = conn.prepareStatement(sql2);
+			ResultSet rs = pstmt.executeQuery(); // 여기서 멈춤.... 
+			
+			while (rs.next()) { // rs.next()가 true일때까지 반복문
+				id = rs.getInt(1); // 1번째 컬럼 가져오기
+			}
+			
+			if (id == stu.getId()) {
+				System.out.println("이미 존재하는 id 입니다. ");
+			} else {
+				break;
+			}
+		} while (id == stu.getId());
+		
+		System.out.println("학생의 이름, 국어, 영어, 수학 점수를 차례로 입력하세요. ");
 		stu.setName(sc.next());
 		stu.setKor(sc.nextInt());
 		stu.setEng(sc.nextInt());
 		stu.setMat(sc.nextInt());
 
 		System.out.println("입력한 값은 다음과 같습니다" + "\n" + stu.toString()); // 마지막 위치에서 새로 추가한 학생 객체 내용 출력
-		size++;
+
+		size++; // linked list 크기 카운트
+
+		String sql = "insert into student values (?, ?, ?, ?, ?)"; // 실시간으로 여기서 바로 새로운 데이터는 삽입
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, stu.getId());
+		pstmt.setString(2, stu.getName());
+		pstmt.setInt(3, stu.getKor());
+		pstmt.setInt(4, stu.getEng());
+		pstmt.setInt(5, stu.getMat());
+		pstmt.executeUpdate();
+
 		return stu;
 	}
 
-	private void dbInput() {
-		try {
-			String sql = "insert into student values(?,?,?,?,?)";
-
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, stu.getId());
-			pstmt.setString(2, stu.getName());
-			pstmt.setInt(3, stu.getKor());
-			pstmt.setInt(4, stu.getEng());
-			pstmt.setInt(5, stu.getMat());
-			pstmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void push() throws SQLException { // java에서 수정하고 삭제한 stu 데이터들 db에 업데이트 하는 작업
+//
+//		System.out.println("myprogram DB에 정보가 입력됩니다. ");
+//		cur = head;
+//
+//		// System.out.println(head.toString());
+////		while(cur != null) {
+////			System.out.println(cur.toString());
+////			cur = cur.next;
+////		}
+//
+//		int id = 0;
+//		String sql = "select * from student where id =?"; // 테이블에 존재하는 데이터 조회
+//
+//		pstmt = conn.prepareStatement(sql);
+//		pstmt.setInt(1, cur.getId());
+//
+//		ResultSet rs = pstmt.executeQuery(); // 쿼리 실행
+//
+//		while (rs.next()) {
+//			System.out.println("rs 실행");
+//			id = rs.getInt(1);
+//			String name = rs.getString(2);
+//			int kor = rs.getInt(3);
+//			int eng = rs.getInt(4);
+//			int mat = rs.getInt(5);
+//		}
+//
+//		if (rs != null) {
+//			// while (rs.next()) {
+//			// System.out.println("지금 1번 while문으로 들어왔습니다 ");
+//			// cur = head; // cur 초기화
+//			while (cur != null) { // 현재 프로그램 내 데이터는 db보다 무조건 같거나 많으므로 cur 기준으로
+////					int id = rs.getInt(1);
+////					String name = rs.getString(2);
+////					int kor = rs.getInt(3);
+////					int eng = rs.getInt(4);
+////					int mat = rs.getInt(5);
+//
+//				if (id == cur.getId()) { // 테이블에 있는 데이터의 id와 cur가 가리키고 있는 stu 객체의 id가 동일하다면
+//					String sql1 = "update student set kor=? where id=?";
+//					pstmt = conn.prepareStatement(sql1);
+//					pstmt.setInt(1, cur.getKor());
+//					pstmt.setInt(2, cur.getId());
+//					pstmt.executeUpdate();
+//
+//					String sql2 = "update student set eng=? where id=?";
+//					pstmt = conn.prepareStatement(sql2);
+//					pstmt.setInt(1, cur.getEng());
+//					pstmt.setInt(2, cur.getId());
+//					pstmt.executeUpdate();
+//
+//					String sql3 = "update student set mat=? where id=?";
+//					pstmt = conn.prepareStatement(sql3);
+//					pstmt.setInt(1, cur.getMat());
+//					pstmt.setInt(2, cur.getId());
+//					pstmt.executeUpdate();
+//
+//				} else {
+//					String sql4 = "insert into student values (?, ?, ?, ?, ?)";
+//					pstmt = conn.prepareStatement(sql4);
+//					pstmt.setInt(1, cur.getId());
+//					pstmt.setString(2, cur.getName());
+//					pstmt.setInt(3, cur.getKor());
+//					pstmt.setInt(4, cur.getEng());
+//					pstmt.setInt(5, cur.getMat());
+//				}
+//
+//				cur = cur.next;
+//			}
+//		}
+//	}
+//	// } else {
+////			System.out.println("지금 2번 while문으로 들어왔습니다 ");
+////			cur = head; // cur 초기화
+////			while (cur != null) {
+////				try {
+////					String sql5 = "insert into student values(?,?,?,?,?)";
+////
+////					pstmt = conn.prepareStatement(sql5);
+////
+////					pstmt.setInt(1, cur.getId());
+////					pstmt.setString(2, cur.getName());
+////					pstmt.setInt(3, cur.getKor());
+////					pstmt.setInt(4, cur.getEng());
+////					pstmt.setInt(5, cur.getMat());
+////					pstmt.executeUpdate();
+////
+////				} catch (SQLException e) {
+////					e.printStackTrace();
+////				}
+////				
+////				cur = cur.next;
+////			}
+////		}
+////
+////	}
+////
+////	private void dbInput() { 
+////		try {
+////			String sql = "insert into student values(?,?,?,?,?)";
+////
+////			pstmt = conn.prepareStatement(sql);
+////
+////			pstmt.setInt(1, stu.getId());
+////			pstmt.setString(2, stu.getName());
+////			pstmt.setInt(3, stu.getKor());
+////			pstmt.setInt(4, stu.getEng());
+////			pstmt.setInt(5, stu.getMat());
+////			pstmt.executeUpdate();
+////
+////		} catch (SQLException e) {
+////			e.printStackTrace();
+////		}
+////	}
 
 	public void stuFiter(NewStudent stu) { // 삽입정렬 (평균점수 내림차순)
 
@@ -138,7 +294,7 @@ public class StudentLink {
 	}
 
 	public NewStudent stuModify() throws SQLException { // 학생 성적 수정
-		stuSearch(); // 이름으로 검색
+		stuSearch();
 
 		int s = 0; // 수정할 점수
 
@@ -151,10 +307,10 @@ public class StudentLink {
 			s = sc.nextInt();
 			cur.setKor(s);
 			try {
-				String sql = "update student set kor=? where name=?";
+				String sql = "update student set kor=? where id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, cur.getKor());
-				pstmt.setString(2, cur.getName());
+				pstmt.setInt(2, cur.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -166,10 +322,10 @@ public class StudentLink {
 			s = sc.nextInt();
 			cur.setEng(s);
 			try {
-				String sql = "update student set eng=? where name=?";
+				String sql = "update student set eng=? where id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, cur.getEng());
-				pstmt.setString(2, cur.getName());
+				pstmt.setInt(2, cur.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -181,10 +337,10 @@ public class StudentLink {
 			s = sc.nextInt();
 			cur.setMat(s);
 			try {
-				String sql = "update student set mat=? where name=?";
+				String sql = "update student set mat=? where id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, cur.getMat());
-				pstmt.setString(2, cur.getName());
+				pstmt.setInt(2, cur.getId());
 				pstmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -215,41 +371,16 @@ public class StudentLink {
 
 	public NewStudent stuSearch() throws SQLException { // 학생 이름으로 검색
 
-		System.out.println("학생 이름을 입력해주세요");
-		String nameIndex = sc.next();
+		System.out.println("학생 Id를 입력해주세요");
+		int IDIndex = sc.nextInt();
 
 		cur = head; // 초기화
 		prev = null;
 
 		for (int i = 0; cur != null && i < size; i++) {
 
-			if (cur.getName().equals(nameIndex)) {
-//				System.out.println(cur.toString());
-				try {
-					String sql = "select * from student where name=?";
-					pstmt = conn.prepareStatement(sql);
-
-					pstmt.setString(1, cur.getName());
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-				ResultSet rs = pstmt.executeQuery();
-				while (rs.next()) {
-					int a = cur.getId();
-					a = rs.getInt(1);
-					String b = cur.getName();
-					b = rs.getString(2);
-					int c = cur.getId();
-					c = rs.getInt(3);
-					int d = cur.getId();
-					d = rs.getInt(4);
-					int e = cur.getId();
-					e = rs.getInt(5);
-				}
-
+			if (cur.getId() == IDIndex) {
 				System.out.println(cur.toString());
-
 				break;
 			}
 			prev = cur;
@@ -257,24 +388,24 @@ public class StudentLink {
 		}
 
 		if (cur == null) { // for문에서 cur가 끝까지 이동했을 때
-			System.out.println("입력하신 이름은 없습니다. ");
+			System.out.println("입력하신 id는 없습니다. ");
 		}
 
 		return cur; // 이름을 찾은 노드의 위치 반환
 
 	}
 
-	public NewStudent studelSearch() { // 학생 이름으로 검색
+	public NewStudent studelSearch() { // 학생 정보 삭제하는 경우 학생 이름으로 검색
 
-		System.out.println("학생 이름을 입력해주세요");
-		String nameIndex = sc.next();
+		System.out.println("학생 Id를 입력해주세요");
+		int IDIndex = sc.nextInt();
 
 		cur = head; // 초기화
 		prev = null;
 
 		for (int i = 0; cur != null && i < size; i++) {
 
-			if (cur.getName().equals(nameIndex)) {
+			if (cur.getId() == IDIndex) {
 				System.out.println(cur.toString());
 				break;
 			}
@@ -283,7 +414,7 @@ public class StudentLink {
 		}
 
 		if (cur == null) { // for문에서 cur가 끝까지 이동했을 때
-			System.out.println("입력하신 이름은 없습니다. ");
+			System.out.println("입력하신 id는 없습니다. ");
 		}
 
 		return prev; // 이름을 찾은 노드의 전 위치 반환
@@ -311,31 +442,26 @@ public class StudentLink {
 		if (cur == null) { // 첫번째 위치를 삭제할 때
 			del = head;
 			head = head.next;
-			try {
-				String sql = "delete from student where name=?";
-
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, del.getName());
-				pstmt.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 
 		}
 
 		else { // 중간 위치를 삭제할 때
 			del = cur.next;
 			cur.next = del.next;
-			try {
-				String sql = "delete from student where name=?";
 
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, del.getName());
-				pstmt.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
+		try {
+			String sql = "delete from student where id=?";
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, del.getId());
+			pstmt.executeUpdate(); // del을 null로 만들기 전에 db에 먼저 업데이트!
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		del.next = null;
 		del = null;
 	}
@@ -344,17 +470,13 @@ public class StudentLink {
 
 		StudentLink link = new StudentLink();
 		System.out.println("DB Connection Success");
+		link.loadDB(); // DB 데이터를 linked list로 연결
 
 		do {
-			if (link.head == null) {
-				link.createDB();
-			}
-
 			link.main();
 			switch (link.button) {
 			case 1:
 				link.stuFiter(link.stuInput()); // 학생 정보 입력
-				link.dbInput();
 				break;
 			case 2:
 				link.stuFiter(link.stuModify()); // 학생 점수 수정
